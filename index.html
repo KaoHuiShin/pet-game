@@ -197,6 +197,35 @@
   }
   .confirm-yes { background: #e8d8d4; border: 1.5px solid var(--danger); color: var(--danger); }
   .confirm-no  { background: var(--btn-bg); border: 1.5px solid var(--border); color: var(--text); }
+
+  /* ── Tutorial ── */
+  .tutorial-overlay {
+    display: none; position: fixed; inset: 0;
+    background: #00000055; align-items: center; justify-content: center; z-index: 40;
+  }
+  .tutorial-overlay.show { display: flex; }
+  .tutorial-box {
+    background: var(--panel); border: 2px solid var(--border);
+    border-radius: 16px; padding: 28px 22px;
+    width: min(480px, 92vw);
+    display: flex; flex-direction: column; gap: 14px; align-items: center;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .tutorial-title { font-size: 16px; color: var(--accent2); text-align: center; line-height: 2; }
+  .tutorial-item {
+    width: 100%; background: var(--bg2);
+    border: 1px solid var(--border2); border-radius: 8px;
+    padding: 10px 12px; font-size: 12px; color: var(--text); line-height: 2.2;
+  }
+  .tutorial-item .icon { font-size: 14px; }
+  .tutorial-btn {
+    background: var(--btn-bg); border: 1.5px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-family: 'Press Start 2P', monospace; font-size: 14px;
+    padding: 12px 24px; cursor: pointer; margin-top: 4px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tutorial-btn:hover { background: var(--btn-hover); }
 </style>
 </head>
 <body>
@@ -229,7 +258,7 @@
 
   <div class="stats">
     <div class="stat-row">
-      <span class="stat-label">飢餓</span>
+      <span class="stat-label">飽食</span>
       <div class="bar-bg"><div class="bar-fill hunger" id="bar-hunger"></div></div>
       <span class="stat-val" id="val-hunger">50</span>
     </div>
@@ -276,6 +305,22 @@
   </div>
 </div>
 
+
+<!-- Tutorial -->
+<div class="tutorial-overlay" id="tutorial-overlay">
+  <div class="tutorial-box">
+    <div class="tutorial-title">🐱 歡迎！教學</div>
+    <div class="tutorial-item"><span class="icon">🍖</span> <b>餵食</b>　補充飽食度 +20，快樂 +5</div>
+    <div class="tutorial-item"><span class="icon">🎾</span> <b>玩耍</b>　快樂 +20，但消耗體力和飽食度</div>
+    <div class="tutorial-item"><span class="icon">💧</span> <b>喝水</b>　補充水分 +10，每天喝水次數會記錄下來</div>
+    <div class="tutorial-item"><span class="icon">🌙</span> <b>睡覺／起床</b>　每睡一小時回復體力 +15。起床後會記錄睡眠時間和當天喝水次數</div>
+    <div class="tutorial-item"><span class="icon">💀</span> <b>死亡條件</b>　飽食度和體力同時歸零，貓咪會變成墓碑，需按重置才能繼續</div>
+    <div class="tutorial-item"><span class="icon">☰</span> <b>設定選單</b>　右上角可以修改名字或重置遊戲</div>
+    <div class="tutorial-item"><span class="icon">⬇</span> <b>CSV</b>　生活紀錄可以下載成 CSV，用 Excel 或 Numbers 開啟</div>
+    <button class="tutorial-btn" onclick="closeTutorial()">開始玩！</button>
+  </div>
+</div>
+
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
     <p>確定要重置遊戲嗎？<br>寵物數值會歸零<br>生活紀錄會保留。</p>
@@ -291,7 +336,7 @@ const canvas = document.getElementById('pet');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 const S = 5;
-const SAVE_KEY = 'pixelpet_v3';
+const SAVE_KEY = 'pixelpet_v4';
 
 function defaultState() {
   return {
@@ -586,6 +631,18 @@ function doReset() {
   save(); renderLog(); updateUI(); drawPet();
 }
 
+
+// ── Tutorial ──
+function closeTutorial() {
+  document.getElementById('tutorial-overlay').classList.remove('show');
+  localStorage.setItem('pixelpet_tutorial_done', '1');
+}
+function checkTutorial() {
+  if (!localStorage.getItem('pixelpet_tutorial_done')) {
+    document.getElementById('tutorial-overlay').classList.add('show');
+  }
+}
+
 // 每 5 分鐘衰減
 setInterval(() => {
   if (state.dead || state.sleeping) return;
@@ -603,6 +660,7 @@ checkDeath();
 renderLog();
 updateUI();
 drawPet();
+checkTutorial();
 if (state.dead)          setStatus('🪦 ' + (state.name||'寵物') + ' 離開了...');
 else if (state.sleeping) setStatus('🌙 寵物正在睡覺...');
 else                     setStatus('嗨！我是你的像素寵物 ♥');
