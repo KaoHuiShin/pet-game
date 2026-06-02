@@ -8,6 +8,8 @@
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html { font-size: 2px; } /* 基準：所有 px 字體都以此縮放，原本 7px = 14px */
+
   body {
     background: #0a0a1a;
     display: flex;
@@ -30,8 +32,8 @@
 
   .sidebar {
     position: fixed;
-    top: 0; right: -280px;
-    width: 260px; height: 100%;
+    top: 0; right: -310px;
+    width: 300px; height: 100%;
     background: #0e0e26;
     border-left: 2px solid #3a3a7a;
     padding: 24px 18px;
@@ -41,10 +43,10 @@
   }
   .sidebar.open { right: 0; }
 
-  .sidebar-title { font-size: 8px; color: #6666bb; letter-spacing: 2px; }
+  .sidebar-title { font-size: 4rem; color: #6666bb; letter-spacing: 2px; }
 
   .sidebar-section { display: flex; flex-direction: column; gap: 8px; }
-  .sidebar-label { font-size: 6px; color: #5555aa; margin-bottom: 2px; }
+  .sidebar-label { font-size: 3rem; color: #5555aa; margin-bottom: 2px; }
 
   .name-input {
     background: #1a1a3a;
@@ -52,7 +54,7 @@
     border-radius: 6px;
     color: #c8c8ff;
     font-family: 'Press Start 2P', monospace;
-    font-size: 7px;
+    font-size: 3.5rem;
     padding: 8px 10px;
     width: 100%;
     outline: none;
@@ -65,7 +67,7 @@
     border-radius: 8px;
     color: #aaaaee;
     font-family: 'Press Start 2P', monospace;
-    font-size: 7px;
+    font-size: 3.5rem;
     padding: 10px;
     cursor: pointer;
     text-align: center;
@@ -84,7 +86,7 @@
     border-radius: 6px;
     color: #5555aa;
     font-family: 'Press Start 2P', monospace;
-    font-size: 7px;
+    font-size: 3.5rem;
     padding: 8px;
     cursor: pointer;
     text-align: center;
@@ -95,7 +97,7 @@
     background: #12122a;
     border: 3px solid #3a3a7a;
     border-radius: 16px;
-    width: 340px;
+    width: min(520px, 96vw);
     padding: 20px 18px 24px;
     display: flex; flex-direction: column;
     align-items: center; gap: 14px;
@@ -107,12 +109,12 @@
     width: 100%;
     display: flex; align-items: center; justify-content: space-between;
   }
-  .pet-name { font-size: 9px; color: #9999dd; }
+  .pet-name { font-size: 4.5rem; color: #9999dd; }
   .menu-btn {
     background: none; border: 1.5px solid #3a3a6a;
     border-radius: 6px; color: #6666aa;
     font-family: 'Press Start 2P', monospace;
-    font-size: 8px; padding: 5px 8px;
+    font-size: 4rem; padding: 5px 8px;
     cursor: pointer; transition: background 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
@@ -129,7 +131,7 @@
   canvas#pet { image-rendering: pixelated; }
   .zzz {
     position: absolute; top: 10px; right: 14px;
-    font-size: 8px; color: #aaaaff;
+    font-size: 4rem; color: #aaaaff;
     opacity: 0; transition: opacity 0.5s; pointer-events: none;
   }
   .zzz.visible { opacity: 1; animation: float 2s ease-in-out infinite; }
@@ -137,8 +139,8 @@
 
   /* Stats */
   .stats { width: 100%; display: flex; flex-direction: column; gap: 8px; }
-  .stat-row { display: flex; align-items: center; gap: 8px; font-size: 7px; }
-  .stat-label { color: #7777bb; width: 28px; flex-shrink: 0; }
+  .stat-row { display: flex; align-items: center; gap: 8px; font-size: 3.5rem; }
+  .stat-label { color: #7777bb; width: 56px; flex-shrink: 0; }
   .bar-bg {
     flex: 1; height: 10px; background: #1e1e3e;
     border-radius: 3px; overflow: hidden; border: 1px solid #2a2a5a;
@@ -148,7 +150,7 @@
   .bar-fill.happy  { background: #ffd060; }
   .bar-fill.energy { background: #60cc80; }
   .bar-fill.water  { background: #60c0ff; }
-  .stat-val { font-size: 7px; color: #6666aa; width: 22px; text-align: right; }
+  .stat-val { font-size: 3.5rem; color: #6666aa; width: 44px; text-align: right; }
 
   /* Buttons */
   .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; width: 100%; }
@@ -157,7 +159,7 @@
   .btn {
     background: #1c1c42; border: 2px solid #3a3a7a; border-radius: 8px;
     color: #aaaaee; font-family: 'Press Start 2P', monospace;
-    font-size: 7px; padding: 10px 4px; cursor: pointer;
+    font-size: 3.5rem; padding: 10px 4px; cursor: pointer;
     text-align: center; transition: background 0.15s, transform 0.1s;
     line-height: 1.6; -webkit-tap-highlight-color: transparent;
   }
@@ -169,14 +171,14 @@
   .btn:disabled  { opacity: 0.35; cursor: not-allowed; transform: none; }
 
   .status {
-    font-size: 7px; color: #6666aa;
+    font-size: 3.5rem; color: #6666aa;
     text-align: center; min-height: 12px; line-height: 1.8;
   }
 
   .divider { width: 100%; border: none; border-top: 1px solid #2a2a5a; }
 
   /* Sleep log */
-  .log-title { font-size: 7px; color: #5555aa; letter-spacing: 1px; align-self: flex-start; }
+  .log-title { font-size: 3.5rem; color: #5555aa; letter-spacing: 1px; align-self: flex-start; }
   .log-list {
     width: 100%; display: flex; flex-direction: column;
     gap: 5px; max-height: 110px; overflow-y: auto;
@@ -186,11 +188,11 @@
   .log-entry {
     background: #0e0e28; border: 1px solid #222248;
     border-radius: 5px; padding: 6px 8px;
-    font-size: 6px; color: #7777bb;
+    font-size: 3rem; color: #7777bb;
     line-height: 1.8; display: flex; flex-direction: column; gap: 2px;
   }
   .log-entry .duration { color: #aaaaee; }
-  .no-log { font-size: 6px; color: #3a3a6a; text-align: center; padding: 8px 0; }
+  .no-log { font-size: 3rem; color: #3a3a6a; text-align: center; padding: 8px 0; }
 
   /* Confirm dialog */
   .confirm-overlay {
@@ -205,11 +207,11 @@
     display: flex; flex-direction: column;
     align-items: center; gap: 12px; width: 260px;
   }
-  .confirm-box p { font-size: 7px; color: #aaaacc; line-height: 2; text-align: center; }
+  .confirm-box p { font-size: 3.5rem; color: #aaaacc; line-height: 2; text-align: center; }
   .confirm-btns { display: flex; gap: 8px; width: 100%; }
   .confirm-btns button {
     flex: 1; font-family: 'Press Start 2P', monospace;
-    font-size: 7px; padding: 9px 4px; border-radius: 6px; cursor: pointer;
+    font-size: 3.5rem; padding: 9px 4px; border-radius: 6px; cursor: pointer;
   }
   .confirm-yes { background: #2a0a0a; border: 1.5px solid #ff4444; color: #ff8888; }
   .confirm-no  { background: #1c1c42; border: 1.5px solid #3a3a7a; color: #aaaaee; }
