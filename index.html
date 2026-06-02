@@ -581,12 +581,25 @@ function checkDeath() {
 }
 
 // ── CSV ──
-function downloadCSV() {
+async function downloadCSV() {
   if (!state.logs.length) { setStatus('還沒有生活紀錄可以下載！'); return; }
   const rows = [['日期','睡覺時間','起床時間','睡眠時長','喝水次數']];
   state.logs.forEach(e => rows.push([e.date, e.sleep, e.wake, e.duration, e.water ?? 0]));
   const csv = rows.map(r => r.map(v => '"' + v + '"').join(',')).join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const file = new File([blob], '生活紀錄.csv', { type: 'text/csv' });
+
+  // 優先用 Web Share API（iOS Chrome/Safari 都支援，會跳出分享視窗）
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: '生活紀錄' });
+      return;
+    } catch(e) {
+      if (e.name === 'AbortError') return;
+    }
+  }
+
+  // 備用：直接下載（電腦瀏覽器）
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = '生活紀錄.csv'; a.click();
